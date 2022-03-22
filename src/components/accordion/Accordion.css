@@ -1,0 +1,60 @@
+.accordion {
+    width: 100%;
+    margin-bottom: 5px;
+}
+.accordionTitle-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background-color: #ffffff;
+    height: 71px;
+    padding: 0 24px;
+    border-radius: 10px;
+}
+.accordionTitle-wrapper h2{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #011F4B;
+    margin: 0;
+}
+.accordionTitle-wrapper h3{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 164.4%;
+    color: #011F4B;
+}
+.accordion-content{
+    width: 100%;
+    padding: 14px 0 14px 15px;
+    background: transparent;
+}
+.accordion-content table ,
+.accordion-content thead,
+.accordion-content tr{
+    width: 100%;
+    border-spacing: 0;
+}
+.accordion-content tr{
+    background: #ffffff;
+    height: 35px;
+}
+.accordion-content tr th:last-child{
+    padding-right: 25px;
+}
+.accordion-content tbody tr:nth-child(odd){
+    background: transparent;
+}
+.accordion-content span {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #011F4B;
+    padding-left: 5px;
+}

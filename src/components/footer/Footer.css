@@ -1,0 +1,16 @@
+.footer-links{
+    display: flex;
+}
+.footer-links li {
+    list-style-type: none;
+    margin-right: 5px;
+}
+.footer-links li a {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #005B96;
+    text-decoration: none;
+}

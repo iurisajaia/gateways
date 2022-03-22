@@ -1,0 +1,11 @@
+.content{
+    padding-top: 33px;
+}
+.content-wrapper{
+    width: calc(100% - 100px);
+    padding-right: 100px;
+}
+.content-body{
+    min-height: 680px;
+    width: 100%;
+}

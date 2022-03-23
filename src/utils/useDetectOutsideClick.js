@@ -9,6 +9,7 @@ export const useDetectOutsideClick = (el, initialState) => {
       if (el.current !== null && !el.current.contains(e.target)) {
         setIsActive(!isActive);
       }
+
     };
 
     // If the item is active (ie open) then listen for clicks

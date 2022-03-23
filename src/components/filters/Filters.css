@@ -16,3 +16,25 @@
     margin-top: 0;
     color: #7E8299;
 }
+.filters-wrapper{
+    display: flex;
+}
+.report-btn{
+    height: 32px;
+    width: 118px;
+    border-radius: 5px;
+    background-color: #005B96;
+    margin-left: 22px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #FFFFFF;
+    border: 0;
+    cursor: pointer;
+}
+.report-btn:focus{
+    outline: none;
+}

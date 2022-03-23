@@ -1,6 +1,7 @@
 .dd-wrapper {
   position: relative;
   border-radius: 5px;
+  margin-left: 23px;
 }
 .dd-header {
   height: 32px;
@@ -8,7 +9,7 @@
   background-color: #1bc5bd;
   display: flex;
   align-items: center;
-  padding: 0 52px 0 13px;
+  padding: 0 0 0 13px;
   border-radius: 5px;
   cursor: pointer;
   position: relative;

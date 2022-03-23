@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { PROJECTS } from "../../constants/routes";
+import { HOME } from "../../constants/routes";
 
 import { getInitialLetters } from "../../utils/helpers";
 
@@ -13,7 +13,7 @@ const Header = ({ user }) => {
   return (
     <header className="flex-between">
       <div className="flex-between">
-        <Link to={PROJECTS}>
+        <Link to={HOME}>
           <img src={LogoIcon} alt="Gateway" title="Gateway" />
         </Link>
         <img src={MenuIcon} alt="BurgerMenu" title="BurgerMenu" id="menuIcon" />

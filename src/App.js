@@ -3,9 +3,9 @@ import { useQuery } from "react-query";
 
 import API from "./configs/API";
 
-import { PROJECTS } from "./constants/routes";
+import { HOME } from "./constants/routes";
 
-import Projects from "./pages/home/Projects";
+import Home from "./pages/home/Home";
 
 import LoaderWrapper from "./components/LoaderWrapper/LoaderWrapper";
 import Layout from "./components/Layout/Layout";
@@ -21,7 +21,7 @@ const App = () => {
     <LoaderWrapper isLoading={isLoading || isFetching}>
       <Layout user={data?.data?.[0]}>
         <Switch>
-          <Route path={PROJECTS} component={Projects} />
+          <Route path={HOME} component={Home} />
         </Switch>
       </Layout>
     </LoaderWrapper>

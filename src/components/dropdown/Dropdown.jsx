@@ -21,7 +21,7 @@ const Dropdown = ({title, options, activeItem, setActiveItem, isDate}) => {
                 className={`dd-header ${isActive && !isDate && "without-bottom-radius"}`}
                 onClick={() => setIsActive(!isActive)}
             >
-                <h3>{isDate ? activeItem.format() : activeItem || title}</h3>
+                <h3>{isDate ? activeItem.format() : activeItem?.name || title}</h3>
 
                 <div className={`dd-arrow ${isActive ? 'arrow-up' : 'arrow-down'}`}/>
             </div>
@@ -46,7 +46,7 @@ const Dropdown = ({title, options, activeItem, setActiveItem, isDate}) => {
                             <div
                                 className="dd-option"
                                 key={i}
-                                onClick={() => handleChangeActiveItem(option?.name)}
+                                onClick={() => handleChangeActiveItem(option)}
                             >
                                 {option?.name}
                             </div>

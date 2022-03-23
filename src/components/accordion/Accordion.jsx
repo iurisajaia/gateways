@@ -40,13 +40,13 @@ const Accordion = ({
                             </tr>
                             </thead>
                             <tbody>
-                            {!!project?.reports.length && project.reports.map(report => (
-                                <tr>
+                            {!!project?.reports.length && project.reports.map((report , i) => (
+                                <tr key={i}>
                                     <th width="25%" className="text-left">
                                         <span>{report.created}</span>
                                     </th>
                                     <th width="25%">
-                                        <span>{report.gateway.name}</span>
+                                        <span>{report.gateway?.name}</span>
                                     </th>
                                     <th width="25%">
                                         <span>a732b</span>

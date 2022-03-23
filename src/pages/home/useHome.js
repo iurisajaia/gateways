@@ -3,6 +3,7 @@ import {useMutation, useQuery} from "react-query";
 
 import API from "../../configs/API";
 import {DateObject} from "react-multi-date-picker";
+import {isObject} from "chart.js/helpers";
 
 const useHome = () => {
     const [activeProject, setActiveProject] = useState(null);
@@ -11,10 +12,105 @@ const useHome = () => {
     const [endDate, setEndDate] = useState(new DateObject('2021-12-31'));
 
     const [activeProjectId, setActiveProjectId] = useState(false);
+    const [reportIsOpen, setReportIsOpen] = useState(true);
+    const [projectsTotal, setProjectsTotal] = useState(0);
 
     const [data, setData] = useState({});
 
+    const gatewaysQuery = useQuery("gateways",  async ()  => await API.get('/gateways').then(res => res.data));
+    const gateways = gatewaysQuery?.data?.data;
 
+
+    const projectsQuery = useQuery("projects", async () => await API.get('/projects').then(res => res?.data));
+    const projects = projectsQuery?.data?.data;
+
+    const isLoading = gatewaysQuery?.isLoading || projectsQuery?.isLoading;
+
+    const reportMutation = useMutation('report', async (reportData) => {
+        return await API.post('/report', reportData).then(res => {
+            const projectsObj = {};
+
+            let filteredGateways = gateways;
+
+            if(activeGateway && typeof activeGateway !== 'string'){
+                filteredGateways = gateways.filter(gt => gt.gatewayId === activeGateway.gatewayId);
+            }
+
+
+            if(activeProject && typeof activeProject !== 'string'){
+                const project = projects.find(p => p.projectId === activeProject.projectId);
+                serializeProjects(project, res?.data?.data , filteredGateways , projectsObj)
+            }else{
+                projects.forEach((project) => serializeProjects(project, res?.data?.data , filteredGateways , projectsObj))
+            }
+
+
+            setData(projectsObj);
+
+        })
+    })
+
+    const serializeProjects = (project , reports , gateways , projectsObj) => {
+        const id = project.projectId;
+
+        let projectReports = [];
+        let amount = 0;
+        let gatewaysTotal = 0;
+
+        let gatewaysObj = {};
+
+        reports.forEach(report => {
+            const gateway = gateways.find(gate => gate.gatewayId === report.gatewayId);
+            if(report.projectId === id && gateway){
+                report.gateway = gateway;
+                projectReports.push(report);
+                amount += report.amount;
+
+                if(!gatewaysObj[gateway.gatewayId]){
+                    gatewaysTotal += report.amount;
+                    gatewaysObj[gateway.gatewayId] = {
+                        gateway,
+                        amount : report.amount
+                    };
+                }
+            }
+        })
+        projectsObj[id] = {
+            name : project.name,
+            amount,
+            reports : projectReports,
+            projectId : project.projectId,
+            gateways : gatewaysObj,
+            gatewaysTotal
+        }
+
+        return projectsObj;
+    }
+
+    // filter data by [ projectId , gatewayId , startDate , endDate ]
+    useEffect(() => {
+        if(!isLoading && projects && projects.length && gateways && gateways.length){
+            const mutateObj = {
+                from : startDate.format('YYYY-MM-DD'),
+                to : endDate.format('YYYY-MM-DD'),
+            }
+            if(activeProject && activeProject.projectId !== 'All Projects'){
+                mutateObj.projectId = activeProject.projectId;
+            }else{
+                delete mutateObj.projectId;
+            }
+            reportMutation.mutate(mutateObj)
+        }
+    }, [activeProjectId , activeGateway , startDate , endDate , projects, gateways , activeProject])
+
+    // set projects total
+    useEffect(() => {
+        if(Object.keys(data).length){
+            let amount = 0;
+            Object.values(data).forEach(project => amount += project.amount);
+            setProjectsTotal(amount);
+        }
+    } , [data])
 
     const handleChangeActiveProject = (project) => {
         if (project?.projectId === activeProjectId) {
@@ -25,73 +121,10 @@ const useHome = () => {
     };
 
 
-
-    const gatewaysQuery = useQuery("gateways",  async ()  => await API.get('/gateways').then(res => res.data?.data));
-    const gateways = gatewaysQuery?.data;
-
-
-    const projectsQuery = useQuery("projects", async () => await API.get('/projects').then(res => res?.data?.data));
-    const projects = projectsQuery?.data;
-
-    const isLoading = gatewaysQuery?.data?.isLoading | projectsQuery?.data?.isLoading;
-
-
-    const reportMutation = useMutation('report', async (reportData) => {
-        return await API.post('/report', reportData).then(res => {
-            const projectsObj = {};
-
-            projects.forEach((project) => {
-
-                const id = project.projectId;
-                const reports = res.data?.data;
-
-                let projectReports = [];
-                let amount = 0;
-
-                reports.forEach(report => {
-                    if(report.projectId === id){
-                        report.gateway = gateways.find(gate => gate.gatewayId === report.gatewayId)
-                        projectReports.push(report);
-                        amount += report.amount;
-                    }
-                })
-                projectsObj[id] = {
-                    name : project.name,
-                    amount,
-                    reports : projectReports,
-                    projectId : project.projectId
-                }
-            })
-
-            setData(projectsObj);
-
-        })
-    })
-
-
-    useEffect(() => {
-        if(!isLoading && projects && projects.length && gateways && gateways.length){
-            const mutateObj = {
-                from : startDate.format('YYYY-MM-DD'),
-                to : endDate.format('YYYY-MM-DD'),
-            }
-            if(activeProjectId && activeProjectId !== 'All Projects'){
-                mutateObj.projectId = activeProjectId;
-                console.log('data' , data[activeProjectId] , activeProjectId)
-                // setData(prevState => ({
-                //     [activeProject] : prevState[activeProject]
-                // }))
-            }else{
-                delete mutateObj.projectId;
-            }
-            reportMutation.mutate(mutateObj)
-        }
-    }, [activeProjectId , activeGateway , startDate , endDate , projects, gateways])
-
-
     return {
-        isLoading: isLoading,
+        isLoading,
         data,
+        projects,
         handleChangeActiveProject,
         activeProjectId,
         activeProject,
@@ -102,7 +135,10 @@ const useHome = () => {
         setStartDate,
         endDate,
         setEndDate,
-        gateways
+        gateways,
+        projectsTotal,
+        reportIsOpen,
+        setReportIsOpen
     };
 };
 

@@ -2,23 +2,13 @@
   width: 100%;
   display: flex;
 }
-.projects-leftSide {
-  width: 100%;
-}
-.projects-rightSide {
-  width: 50%;
-}
-.chart-box {
-  width: 270px;
-  height: 270px;
-  margin: auto;
-}
 .projects-wrapper {
   background: #f1fafe;
   width: 100%;
   height: 100%;
   padding: 24px 19px;
   border-radius: 10px;
+  min-height: 350px;
 }
 .projects-wrapper h2 {
   margin-bottom: 34px;
@@ -46,4 +36,7 @@
   font-size: 16px;
   line-height: 19px;
   color: #011f4b;
+}
+.report{
+  min-height: 350px;
 }

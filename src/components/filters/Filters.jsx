@@ -11,7 +11,10 @@ const Filters = ({
                      startDate,
                      setStartDate,
                      endDate,
-                     setEndDate
+                     setEndDate,
+                     gateways,
+                     reportIsOpen,
+                     setReportIsOpen
                  }) => {
 
     return (
@@ -23,13 +26,13 @@ const Filters = ({
             <div className="filters-wrapper">
                 <Dropdown
                     title="All Projects"
-                    options={Object.values(projects)}
+                    options={projects}
                     activeItem={activeProject}
                     setActiveItem={setActiveProject}
                 />
                 <Dropdown
                     title="All Gateways"
-                    options={[]}
+                    options={gateways}
                     activeItem={activeGateway}
                     setActiveItem={setActiveGateway}
                 />
@@ -47,7 +50,7 @@ const Filters = ({
                     setActiveItem={setEndDate}
                     isDate
                 />
-                <button className="report-btn">Generate Report</button>
+                <button className="report-btn" onClick={() => setReportIsOpen(!reportIsOpen)}>Generate Report</button>
             </div>
         </div>
     );

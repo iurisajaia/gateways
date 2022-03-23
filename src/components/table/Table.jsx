@@ -1,4 +1,4 @@
-const Table = ({ columns, values }) => {
+const Table = ({ columns, rows }) => {
   return (
     <table>
       <thead>
@@ -11,9 +11,9 @@ const Table = ({ columns, values }) => {
         </tr>
       </thead>
       <tbody>
-        {values.map((value, key) => (
+        {rows.map((row, key) => (
           <tr key={key}>
-            {value.values.map((v, i) => (
+            {row.values.map((v, i) => (
               <td key={i}>
                 <span>{v}</span>
               </td>

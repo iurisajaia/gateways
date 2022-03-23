@@ -29,3 +29,22 @@ body{
 .text-right{
   text-align: right;
 }
+.full-width{
+  width: 100%;
+  animation: fullWidth 0.3s ease-in;
+}
+.half-width{
+  width: 50%;
+}
+.half-width--withAnimation{
+  width: 50%;
+  animation: halfWidth 0.3s ease-in;
+}
+@keyframes fullWidth {
+  from {width: 50%}
+  to {width: 100%}
+}
+@keyframes halfWidth {
+  from {width: 100%}
+  to {width: 50%}
+}

@@ -1,0 +1,24 @@
+.chart-total{
+    margin-left: 31px;
+    width: 100%;
+    height: 53px;
+    border-radius: 10px;
+    background: #F1FAFE;
+    border-radius: 10px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+.chart-total h3{
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 19px;
+    text-align: left;
+    text-transform: uppercase;
+}
+.doughnut{
+    margin: auto;
+}

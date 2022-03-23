@@ -1,27 +1,35 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import {Chart as ChartJS, ArcElement, Tooltip, Legend} from "chart.js";
+import {Doughnut} from "react-chartjs-2";
+
+import useChart from "./useChart";
+
+import "./Chart.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const Chart = () => {
-  return (
-    <div className="chart-box">
-      <Doughnut
-        data={{
-          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-          datasets: [
-            {
-              label: "# of Votes",
-              data: [12, 19, 3, 5],
-              backgroundColor: ["#A259FF", "#F24E1E", "#FFC107", "#6497B1"],
-              borderColor: ["#A259FF", "#F24E1E", "#FFC107", "#6497B1"],
-              borderWidth: 1,
-            },
-          ],
-        }}
-      />
-    </div>
-  );
+const Chart = ({data, activeProject, activeGateway}) => {
+    const {chartData,chartTotal} = useChart(data, activeProject, activeGateway);
+    return (
+        <div className="chart-box">
+            {Object.keys(chartData).length && (
+                <>
+                    <Doughnut
+                        height="270px"
+                        className="doughnut"
+                        options={{
+                            maintainAspectRatio: false,
+                            responsive: false,
+                        }}
+                        data={chartData}
+                        type="doughnut"
+                     />
+                    <div className="chart-total">
+                        <h3>Projects total | {chartTotal.toFixed(2)} USD</h3>
+                    </div>
+                </>
+            )}
+        </div>
+    );
 };
 
 export default Chart;

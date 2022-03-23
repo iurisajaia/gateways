@@ -1,24 +1,28 @@
+import { useState } from "react";
+
+import Dropdown from "../dropdown/Dropdown";
+
 import "./Filters.css";
 
-import Select from "../select/Select";
+const Filters = ({ projects }) => {
+  const [activeProject, setActiveProject] = useState(null);
 
-
-
-const Filters = () => {
-    return (
-        <div className="flex-between">
-            <div className="filtersText-wrapper">
-                <h2>Reports</h2>
-                <h6>Easily generate a report of your transactions</h6>
-            </div>
-            <div className="filters-wrapper">
-                <Select title="Select Project" />
-                <Select title="Select Gateway" />
-                <Select title="From Date" />
-                <Select title="To Date" />
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex-between">
+      <div className="filtersText-wrapper">
+        <h2>Reports</h2>
+        <h6>Easily generate a report of your transactions</h6>
+      </div>
+      <div className="filters-wrapper">
+        <Dropdown
+          title="All Projects"
+          options={projects}
+          activeItem={activeProject}
+          setActiveItem={setActiveProject}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default Filters;

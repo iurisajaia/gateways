@@ -1,22 +1,21 @@
-import React , { Suspense } from 'react';
-import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter as Router } from 'react-router-dom';
-import ReactDOM from 'react-dom';
+import React, { Suspense } from "react";
+import { QueryClientProvider } from "react-query";
+import { BrowserRouter as Router } from "react-router-dom";
+import ReactDOM from "react-dom";
 
-import App from './App';
+import { queryClient } from "./configs/queryClient";
 
-const queryClient = new QueryClient();
+import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-      <Suspense fallback="loading...">
-          <QueryClientProvider client={queryClient}>
-              <Router>
-                <App />
-              </Router>
-          </QueryClientProvider>
-      </Suspense>
+    <Suspense fallback="loading...">
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <App />
+        </Router>
+      </QueryClientProvider>
+    </Suspense>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
-

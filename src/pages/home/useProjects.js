@@ -1,22 +1,31 @@
-import {useQuery} from "react-query";
+import { useState } from "react";
+import { useQuery } from "react-query";
 
-import API from "../../network/API";
+import API from "../../configs/API";
 
 const useProjects = () => {
+  const [activeProjectId, setActiveProjectId] = useState(false);
 
-    const { isLoading, error, data, isFetching } = useQuery("projects", () =>
-        API('/projects').then((res) => res.data)
-    );
-
-    return {
-        isLoading,
-        error,
-        projects : data?.data,
-        isFetching
+  const handleChangeActiveProject = (projectId) => {
+    if (projectId === activeProjectId) {
+      setActiveProjectId(false);
+    } else {
+      setActiveProjectId(projectId);
     }
+  };
 
+  const { isLoading, error, data, isFetching } = useQuery("projects", () =>
+    API("/projects").then((res) => res.data)
+  );
+
+  return {
+    isLoading,
+    error,
+    projects: data?.data,
+    isFetching,
+    handleChangeActiveProject,
+    activeProjectId,
+  };
 };
 
 export default useProjects;
-
-

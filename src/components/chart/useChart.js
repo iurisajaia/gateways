@@ -1,5 +1,7 @@
 import {useEffect , useState} from "react";
 
+import {chartColors} from "../../constants/colors";
+
 const useChart = (data, activeProject, activeGateway) => {
 
     const [ chartData , setChartData ] = useState({});
@@ -38,18 +40,25 @@ const useChart = (data, activeProject, activeGateway) => {
             })
 
             if(Object.keys(labels).length){
-                setChartData({
-                    labels: Object.values(labels).map(label => label.name),
-                    datasets: [
+                let chartDataObj = {
+                    labels : [],
+                    datasets : [
                         {
-                            label : 'none',
-                            data : Object.values(labels).map(label => Math.ceil((label.amount / total) * 100)),
-                            backgroundColor: ["#A259FF", "#F24E1E"],
-                            borderColor: ["#A259FF", "#F24E1E"],
-                            borderWidth: 1,
+                            data : [],
+                            backgroundColor : [],
+                            borderColor : [],
+                            borderWidth : 1
                         }
                     ]
-                });
+                };
+                Object.values(labels).map((label , i) => {
+                    chartDataObj.labels.push(label.name);
+                    chartDataObj.datasets[0].data.push(Math.ceil((label.amount / total) * 100));
+                    chartDataObj.datasets[0].backgroundColor.push(chartColors[i]);
+                    chartDataObj.datasets[0].borderColor.push(chartColors[i]);
+                })
+
+                setChartData(chartDataObj);
             }
 
             setChartTotal(total);

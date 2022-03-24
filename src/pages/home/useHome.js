@@ -1,9 +1,8 @@
 import {useEffect, useState} from "react";
 import {useMutation, useQuery} from "react-query";
+import {DateObject} from "react-multi-date-picker";
 
 import API from "../../configs/API";
-import {DateObject} from "react-multi-date-picker";
-import {isObject} from "chart.js/helpers";
 
 const useHome = () => {
     const [activeProject, setActiveProject] = useState(null);
@@ -17,7 +16,7 @@ const useHome = () => {
 
     const [data, setData] = useState({});
 
-    const gatewaysQuery = useQuery("gateways",  async ()  => await API.get('/gateways').then(res => res.data));
+    const gatewaysQuery = useQuery("gateways", async () => await API.get('/gateways').then(res => res.data));
     const gateways = gatewaysQuery?.data?.data;
 
 
@@ -31,26 +30,22 @@ const useHome = () => {
             const projectsObj = {};
 
             let filteredGateways = gateways;
-
-            if(activeGateway && typeof activeGateway !== 'string'){
+            if (activeGateway && typeof activeGateway !== 'string') {
                 filteredGateways = gateways.filter(gt => gt.gatewayId === activeGateway.gatewayId);
             }
 
-
-            if(activeProject && typeof activeProject !== 'string'){
+            if (activeProject && typeof activeProject !== 'string') {
                 const project = projects.find(p => p.projectId === activeProject.projectId);
-                serializeProjects(project, res?.data?.data , filteredGateways , projectsObj)
-            }else{
-                projects.forEach((project) => serializeProjects(project, res?.data?.data , filteredGateways , projectsObj))
+                serializeProjects(project, res?.data?.data, filteredGateways, projectsObj)
+            } else {
+                projects.forEach((project) => serializeProjects(project, res?.data?.data, filteredGateways, projectsObj))
             }
 
-
             setData(projectsObj);
-
         })
     })
 
-    const serializeProjects = (project , reports , gateways , projectsObj) => {
+    const serializeProjects = (project, reports, gateways, projectsObj) => {
         const id = project.projectId;
 
         let projectReports = [];
@@ -61,26 +56,28 @@ const useHome = () => {
 
         reports.forEach(report => {
             const gateway = gateways.find(gate => gate.gatewayId === report.gatewayId);
-            if(report.projectId === id && gateway){
+            if (report.projectId === id && gateway) {
                 report.gateway = gateway;
                 projectReports.push(report);
                 amount += report.amount;
-
-                if(!gatewaysObj[gateway.gatewayId]){
+                
+                // add gateways object for chart
+                if (!gatewaysObj[gateway.gatewayId]) {
                     gatewaysTotal += report.amount;
                     gatewaysObj[gateway.gatewayId] = {
                         gateway,
-                        amount : report.amount
+                        amount: report.amount
                     };
                 }
             }
         })
+
         projectsObj[id] = {
-            name : project.name,
+            name: project.name,
             amount,
-            reports : projectReports,
-            projectId : project.projectId,
-            gateways : gatewaysObj,
+            reports: projectReports,
+            projectId: project.projectId,
+            gateways: gatewaysObj,
             gatewaysTotal
         }
 
@@ -89,28 +86,34 @@ const useHome = () => {
 
     // filter data by [ projectId , gatewayId , startDate , endDate ]
     useEffect(() => {
-        if(!isLoading && projects && projects.length && gateways && gateways.length){
+        if (!isLoading && projects && projects.length && gateways && gateways.length) {
             const mutateObj = {
-                from : startDate.format('YYYY-MM-DD'),
-                to : endDate.format('YYYY-MM-DD'),
+                from: startDate.format('YYYY-MM-DD'),
+                to: endDate.format('YYYY-MM-DD'),
             }
-            if(activeProject && activeProject.projectId !== 'All Projects'){
+            if (activeProject && typeof activeProject !== 'string') {
                 mutateObj.projectId = activeProject.projectId;
-            }else{
+            } else {
                 delete mutateObj.projectId;
+            }
+
+            if (activeGateway && typeof activeGateway !== 'string') {
+                mutateObj.gatewayId = activeGateway.gatewayId;
+            } else {
+                delete mutateObj.gatewayId;
             }
             reportMutation.mutate(mutateObj)
         }
-    }, [activeProjectId , activeGateway , startDate , endDate , projects, gateways , activeProject])
+    }, [activeProjectId, activeGateway, startDate, endDate, projects, gateways, activeProject, activeGateway])
 
     // set projects total
     useEffect(() => {
-        if(Object.keys(data).length){
+        if (Object.keys(data).length) {
             let amount = 0;
             Object.values(data).forEach(project => amount += project.amount);
             setProjectsTotal(amount);
         }
-    } , [data])
+    }, [data])
 
     const handleChangeActiveProject = (project) => {
         if (project?.projectId === activeProjectId) {

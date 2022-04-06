@@ -1,4 +1,5 @@
 import "./Accordion.css";
+import dayjs from "dayjs";
 
 const Accordion = ({
                        project,
@@ -7,6 +8,8 @@ const Accordion = ({
                        setActiveProjectId,
                        activeProjectId,
                    }) => {
+
+    const reports = project.reports.sort((a,b) => new Date(a.created) - new Date(b.created))
     return (
         <div className="accordion" key={project?.projectId}>
             <div
@@ -40,10 +43,10 @@ const Accordion = ({
                             </tr>
                             </thead>
                             <tbody>
-                            {!!project?.reports.length && project.reports.map((report , i) => (
+                            {!!reports.length && reports.map((report , i) => (
                                 <tr key={i}>
                                     <th width="25%" className="text-left">
-                                        <span>{report.created}</span>
+                                        <span>{dayjs(report.created).format('DD.MM.YYYY')}</span>
                                     </th>
                                     <th width="25%">
                                         <span>{report.gateway?.name}</span>
